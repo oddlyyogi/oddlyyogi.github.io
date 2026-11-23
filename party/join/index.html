@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join the party · Party Games</title>
+<meta name="description" content="You're invited to a Party Games party. Open the app to join.">
+<meta property="og:title" content="🎉 You're invited to a party on Party Games">
+<meta property="og:description" content="Tap to join. Be on the same Wi‑Fi as the host.">
+<style>
+  :root { --bg:#0E0B1F; --bg2:#2A1B5E; --text:#F5F3FF; --muted:#A5A1C2;
+          --coral:#FF4D6D; --violet:#8B5CF6; --card:#231A4A; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; font-family:-apple-system,system-ui,Roboto,sans-serif;
+         background:linear-gradient(180deg,var(--bg2),var(--bg)); color:var(--text);
+         display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+  main { width:100%; max-width:420px; text-align:center; }
+  .emoji { font-size:64px; }
+  h1 { font-size:26px; margin:8px 0 4px; }
+  p { color:var(--muted); line-height:1.5; margin:6px 0; }
+  .code { font-size:40px; font-weight:900; letter-spacing:10px; color:#C4B5FD; margin:12px 0; }
+  a.btn { display:block; padding:16px; border-radius:16px; margin:12px 0; font-weight:700;
+          font-size:17px; text-decoration:none; color:#fff; }
+  .primary { background:linear-gradient(135deg,var(--coral),#E11D48); }
+  .secondary { background:var(--card); border:1px solid rgba(255,255,255,.15); }
+  .note { font-size:13px; margin-top:20px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="emoji">🎉</div>
+  <h1 id="title">You're invited to a party!</h1>
+  <p>Make sure you're on the <b>same Wi‑Fi</b> as the host (or their Hotspot).</p>
+  <div class="code" id="code"></div>
+
+  <a class="btn primary" id="open" href="#">Open in Party Games</a>
+  <a class="btn secondary hidden" id="play" href="#">Get it on Google Play</a>
+  <p class="hidden" id="ios">iPhone version coming soon. For now, join from an Android phone.</p>
+
+  <p class="note">Already in WhatsApp's browser? Tap "Open in Party Games", or open
+    this link in Chrome / Safari.</p>
+</main>
+<script>
+  // Static page: it only opens the app or the store. No data is sent anywhere.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var name = (q.get('n') || '').slice(0, 20);
+    var code = (q.get('c') || '').slice(0, 5);
+    if (name) document.getElementById('title').textContent = name + "'s party 🎉";
+    document.getElementById('code').textContent = code;
+
+    var pkg = 'com.yogiapps.audio_reverser';
+    var query = location.search.replace(/^\?/, '');
+    var appUrl = 'partygames://join?' + query;
+    // Android passes the invite through the install so the app can join
+    // automatically after installing.
+    var playUrl = 'https://play.google.com/store/apps/details?id=' + pkg +
+        '&referrer=' + encodeURIComponent(query);
+    var ua = navigator.userAgent;
+    var isAndroid = /Android/i.test(ua);
+    var isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    var open = document.getElementById('open');
+    var play = document.getElementById('play');
+    if (isAndroid) {
+      // Opens the app if installed, otherwise Google Play.
+      open.href = 'intent://join?' + query + '#Intent;scheme=partygames;package=' +
+          pkg + ';S.browser_fallback_url=' + encodeURIComponent(playUrl) + ';end';
+      play.href = playUrl;
+      play.classList.remove('hidden');
+      setTimeout(function () { location.href = open.href; }, 400);
+    } else if (isIOS) {
+      open.href = appUrl;
+      document.getElementById('ios').classList.remove('hidden');
+    } else {
+      open.href = appUrl;
+      play.href = playUrl;
+      play.classList.remove('hidden');
+    }
+  })();
+</script>
+</body>
+</html>

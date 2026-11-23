@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.yogiapps.audio_reverser",
+      "sha256_cert_fingerprints": [
+        "49:4B:68:21:2D:F3:DB:8A:D3:47:1E:74:9F:90:94:E5:10:23:26:E3:75:BE:2C:55:8B:9E:9A:A8:A6:63:BB:3C",
+        "B2:6F:EE:31:4C:18:E5:F5:55:12:21:BF:F7:D1:41:70:83:6A:D6:F4:E7:8E:81:05:93:16:A3:A8:7B:83:85:8A"
+      ]
+    }
+  }
+]
